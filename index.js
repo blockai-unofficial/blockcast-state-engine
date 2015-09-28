@@ -56,7 +56,7 @@ module.exports = function(options) {
         blockcasts = blockcasts.concat(blockInfo.blockcasts);
         var nextblockhash = blockInfo.block.nextblockhash;
         if (options.toBlockHeight) {
-          if (currentHeight + 1 >= options.toBlockHeight) {
+          if (currentHeight + 1 > options.toBlockHeight) {
             return callback(false, blockcasts);
           }
         }
@@ -82,4 +82,3 @@ module.exports = function(options) {
   }
 
 }
-

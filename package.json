@@ -1,6 +1,6 @@
 {
   "name": "blockcast-state-engine",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Blockcast State Engine",
   "main": "index.js",
   "dependencies": {
@@ -9,6 +9,7 @@
     "bitcoinjs-lib": "^1.5.8",
     "blockcast": "^3.3.0",
     "node-env-file": "^0.1.7",
+    "rpc-common-blockchain": "^1.1.0",
     "tape": "^4.2.0"
   },
   "devDependencies": {},
