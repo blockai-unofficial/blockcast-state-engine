@@ -42,7 +42,6 @@ test('scanFrom', function (t) {
     }
   }, function (err, blockcasts) {
     if (err) { } // TODO
-    console.log(blockcasts[0])
     t.equal(blockcasts.length, 4, 'has 4 blockcasts')
     t.equal(blockcasts[0].data, 'fTmp34KdrUApes4Ro4NpSUpR4gItC0', 'has matching short data')
     t.equal(blockcasts[0].blockId, '0000000000003585e8d4a23ec784dc845f28cc8bc0950fc68a6bc5863a10f578', 'is right block')

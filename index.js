@@ -6,8 +6,9 @@ module.exports = function (options) {
 
   var getBlock = function (blockId, callback) {
     var blockcasts = []
-    commonBlockchain.Blocks.Get([blockId], function (err, block) {
+    commonBlockchain.Blocks.Get([blockId], function (err, blocks) {
       if (err) { } // TOD
+      var block = blocks[0]
       var transactions = block.transactions
       async.each(transactions, function (tx, next) {
         blockcast.scanSingle({
