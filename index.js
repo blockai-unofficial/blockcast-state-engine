@@ -72,10 +72,14 @@ module.exports = function (options) {
         }
       })
     }
-    commonBlockchain.Blocks.GetBlockHash(currentHeight, function (err, blockId) {
-      if (err) { } // TODO
-      onBlockId(blockId)
-    })
+    if (!currentHeight && options.blockId) {
+      onBlockId(options.blockId)
+    } else {
+      commonBlockchain.Blocks.GetBlockHash(currentHeight, function (err, blockId) {
+        if (err) { } // TODO
+        onBlockId(blockId)
+      })
+    }
   }
 
   return {
