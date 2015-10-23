@@ -4,30 +4,40 @@ var blockcast = require('blockcast')
 module.exports = function (options) {
   var commonBlockchain = options.commonBlockchain
 
-  var getBlock = function (blockId, callback) {
+  var getBlock = function (options, callback) {
+    var blockId = options.blockId
     var blockcasts = []
     commonBlockchain.Blocks.Get([blockId], function (err, blocks) {
       if (err) { } // TOD
       var block = blocks[0]
       var transactions = block.transactions
       async.each(transactions, function (tx, next) {
-        blockcast.scanSingle({
-          tx: tx,
-          commonBlockchain: commonBlockchain
-        }, function (err, data, addresses) {
-          if (!err && data && addresses) {
-            blockcasts.push({
-              index: transactions.indexOf(tx),
-              blockId: blockId,
-              tx: tx,
-              data: data,
-              addresses: addresses
-            })
-          }
-          try {
-            next()
-          } catch (e) {}
-        })
+        var scanBlockcast = function () {
+          blockcast.scanSingle({
+            tx: tx,
+            commonBlockchain: commonBlockchain
+          }, function (err, data, addresses) {
+            if (!err && data && addresses) {
+              blockcasts.push({
+                index: transactions.indexOf(tx),
+                blockId: blockId,
+                tx: tx,
+                data: data,
+                addresses: addresses
+              })
+            }
+            try {
+              next()
+            } catch (e) {}
+          })
+        }
+        if (options.onTransaction) {
+          options.onTransaction(tx, function () {
+            scanBlockcast()
+          })
+        } else {
+          scanBlockcast()
+        }
       }, function (err) {
         if (!err) {
           callback(false, {
@@ -44,7 +54,7 @@ module.exports = function (options) {
     var currentHeight = options.blockHeight
     var blockcasts = []
     var onBlockId = function (blockId) {
-      getBlock(blockId, function (err, blockInfo) {
+      getBlock({blockId: blockId, onTransaction: options.onTransaction}, function (err, blockInfo) {
         blockInfo.block.blockHeight = currentHeight
         blockInfo.blockHeight = currentHeight
         if (options.onBlock) {
